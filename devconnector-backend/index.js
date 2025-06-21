@@ -10,8 +10,6 @@ const uploadRoute = require("./routes/uploadRoute");
 
 const app = express();
 
-const cors = require("cors");
-
 app.use(cors({
   origin: "https://finaldevconect.vercel.app", // ✅ No trailing slash
   credentials: true
