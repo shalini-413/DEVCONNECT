@@ -12,7 +12,7 @@ const app = express();
 
 // ✅ Allow specific origin for frontend (Vercel)
 app.use(cors({
-  origin: "https://devcon-phi.vercel.app",
+  origin: "https://finaldevconect.vercel.app/",
   credentials: true,
 }));
 

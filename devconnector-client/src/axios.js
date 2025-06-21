@@ -7,9 +7,14 @@
 //   },
 // });
 
+// src/axios.js
 import axios from "axios";
 
-export default axios.create({
-  baseURL: "https://devconnect-1-ermh.onrender.com/api",
-  withCredentials: true,
+const instance = axios.create({
+  baseURL: "https://devconnect-1-ermh.onrender.com/api", // ✅ add `/api` here if your backend uses it in routes
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
+
+export default instance;
