@@ -16,6 +16,13 @@ app.use("/api/posts", postRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/uploads", express.static("uploads"));
 
+// Deploy React frontend (build folder)
+app.use(express.static(path.join(__dirname, "../devconnector-client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../devconnector-client/dist/index.html"));
+});
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => console.error("❌ MongoDB Error:", err));
