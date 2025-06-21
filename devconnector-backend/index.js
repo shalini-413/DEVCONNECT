@@ -10,10 +10,11 @@ const uploadRoute = require("./routes/uploadRoute");
 
 const app = express();
 
-// ✅ Allow specific origin for frontend (Vercel)
+const cors = require("cors");
+
 app.use(cors({
-  origin: "https://finaldevconect.vercel.app/",
-  credentials: true,
+  origin: "https://finaldevconect.vercel.app", // ✅ No trailing slash
+  credentials: true
 }));
 
 app.use(express.json());
