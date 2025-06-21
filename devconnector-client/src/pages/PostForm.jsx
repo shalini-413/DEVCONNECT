@@ -10,10 +10,14 @@ const PostForm = () => {
   const token = localStorage.getItem("token");
 
   const fetchPosts = async () => {
-    const res = await axios.get("/posts", {
-      headers: { Authorization: token },
-    });
-    setPosts(res.data);
+    try {
+      const res = await axios.get("/posts", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPosts(res.data);
+    } catch (err) {
+      toast.error("Failed to fetch posts");
+    }
   };
 
   useEffect(() => {
@@ -25,12 +29,12 @@ const PostForm = () => {
     try {
       if (editId) {
         await axios.put(`/posts/${editId}`, form, {
-          headers: { Authorization: token },
+          headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Post updated");
       } else {
         await axios.post("/posts", form, {
-          headers: { Authorization: token },
+          headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Post created");
       }
@@ -48,11 +52,15 @@ const PostForm = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`/posts/${id}`, {
-      headers: { Authorization: token },
-    });
-    toast.success("Post deleted");
-    fetchPosts();
+    try {
+      await axios.delete(`/posts/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Post deleted");
+      fetchPosts();
+    } catch {
+      toast.error("Delete failed");
+    }
   };
 
   return (

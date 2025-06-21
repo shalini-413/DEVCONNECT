@@ -82,5 +82,14 @@ router.put("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-
+// Get User Profile
+router.get("/profile", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user).select("-password");
+    res.json(user);
+  } catch (error) {
+    console.error("Profile Fetch Error:", error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
 module.exports = router;

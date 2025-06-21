@@ -3,60 +3,58 @@ import axios from "../axios";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [avatar, setAvatar] = useState(null);
+  const [user, setUser] = useState({});
+  const token = localStorage.getItem("token");
+
+  const fetchProfile = async () => {
+    const res = await axios.get("/auth/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setUser(res.data);
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get("/auth/dashboard", { headers: { Authorization: token } }) // Simulating get user
-      .then((res) => {
-        setFormData({
-          name: res.data.user?.name || "",
-          email: res.data.user?.email || "",
-        });
-      });
+    fetchProfile();
   }, []);
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("avatar", file);
+
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.put(
-        "/auth/profile",
-        formData,
-        { headers: { Authorization: token } }
-      );
-      toast.success(res.data.msg);
-    } catch (err) {
-      toast.error(err.response?.data?.msg || "Update failed");
+      const res = await axios.post("/upload/avatar", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Avatar uploaded");
+      fetchProfile();
+    } catch {
+      toast.error("Upload failed");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
-      <form onSubmit={handleUpdate}>
-        <input
-          className="input"
-          type="text"
-          placeholder="Name"
-          value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
+    <div className="max-w-md mx-auto mt-10 text-center">
+      <h2 className="text-xl font-bold mb-4">My Profile</h2>
+      {user.avatar && (
+        <img
+          src={user.avatar}
+          alt="Avatar"
+          className="w-24 h-24 mx-auto mb-4 rounded-full border"
         />
-        <input
-          className="input"
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({...formData, email: e.target.value})}
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Update Profile
-        </button>
-      </form>
+      )}
+      <p className="text-gray-700 mb-2">{user.name}</p>
+      <p className="text-gray-500 mb-4">{user.email}</p>
+
+      <input
+        type="file"
+        onChange={handleUpload}
+        className="block mx-auto mb-4"
+      />
     </div>
   );
 };
