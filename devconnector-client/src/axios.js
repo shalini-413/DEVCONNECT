@@ -7,11 +7,15 @@
 //   },
 // });
 
-// src/axios.js
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://devconnect-1-ermh.onrender.com/api", // ✅ Your real backend URL here
+  baseURL: "https://devconnect-o24y.onrender.com/api/", // ✅ Make sure `/api/` is included
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true, // ✅ Important for sending cookies / auth
 });
 
 export default instance;
+
