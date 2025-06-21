@@ -11,10 +11,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://devconnect-1-ermh.onrender.com/api", // ✅ add `/api` here if your backend uses it in routes
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "https://devconnect-1-ermh.onrender.com/api", // ✅ Your real backend URL here
 });
 
 export default instance;
