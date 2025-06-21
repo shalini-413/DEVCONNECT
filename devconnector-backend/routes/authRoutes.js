@@ -51,4 +51,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+const authMiddleware = require("../middleware/authMiddleware");
+
+router.get("/dashboard", authMiddleware, async (req, res) => {
+  res.json({ msg: `Welcome User ID: ${req.user}` });
+});
+
+
 module.exports = router;
