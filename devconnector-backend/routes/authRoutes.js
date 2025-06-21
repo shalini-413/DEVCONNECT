@@ -59,4 +59,28 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
 });
 
 
+// Update profile (name or email)
+router.put("/profile", authMiddleware, async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user,
+      { name, email },
+      { new: true }
+    );
+    res.json({
+      msg: "Profile updated successfully",
+      user: {
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      },
+    });
+  } catch (err) {
+    console.error("Update Profile Error:", err);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
+
 module.exports = router;
